@@ -1,0 +1,45 @@
+import json
+import os
+
+MEMORY_FILE = "kulfi_memory.json"
+
+# Load existing memory or create new'
+def load_memory():
+    if os.path.exists(MEMORY_FILE):
+        with open(MEMORY_FILE, "r") as f:
+            return json.load(f)
+    return {}
+
+# Save memory to file
+def save_memory(memory):
+    with open(MEMORY_FILE, "w") as f:
+        json.dump(memory, f, indent=4)
+
+# Kulfi Bot
+def kulfi_bot():
+    print("🍦 Kulfi Bot with Permanent Memory Activated!")
+    print("Type 'exit' to stop.\n")
+
+    memory = load_memory()
+
+    while True:
+        user_input = input("You: ").lower()
+
+        if user_input == "exit":
+            print("🍦 Kulfi Bot: Bye ji! Memory saved.")
+            save_memory(memory)
+            break
+
+        # If bot knows the answer
+        if user_input in memory:
+            print("Kulfi Bot:", memory[user_input])
+        else:
+            print("Kulfi Bot: Mujhe yeh reply nahi aata... Teach me!")
+            teach = input("What should I reply to this? ")
+
+            # Save new memory
+            memory[user_input] = teach
+            save_memory(memory)
+            print("Kulfi Bot: Reply saved permanently! 😎")
+
+kulfi_bot()
